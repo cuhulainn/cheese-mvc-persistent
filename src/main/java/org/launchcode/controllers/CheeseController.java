@@ -30,7 +30,7 @@ public class CheeseController {
     public String index(Model model) {
 
         model.addAttribute("cheeses", cheeseDao.findAll());
-        model.addAttribute("title", "My Cheeses");
+        model.addAttribute("title", "My Cheesy Cheeses");
 
         return "cheese/index";
     }
@@ -79,22 +79,23 @@ public class CheeseController {
     public String displayEditForm(Model model, @PathVariable int cheeseId) {
         model.addAttribute("cheese", cheeseDao.findOne(cheeseId));
         model.addAttribute("categories", categoryDao.findAll());
+        model.addAttribute("title", "Edit Cheese");
         return "cheese/edit";
     }
 
     @RequestMapping(value="edit", method = RequestMethod.POST)
-    public String processEditForm(@ModelAttribute @Valid Cheese editedCheese, Errors errors, Model model) {
+    public String processEditForm(@ModelAttribute @Valid Cheese editedCheese, @RequestParam int category, @RequestParam int id, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("cheese", cheeseDao.findOne(editedCheese.getId()));
+            model.addAttribute("cheese", cheeseDao.findOne(id));
             model.addAttribute("categories", categoryDao.findAll() );
             return "cheese/edit";
         }
 
-        Cheese cheeseToEdit = cheeseDao.findOne(editedCheese.getId());
+        Cheese cheeseToEdit = cheeseDao.findOne(id);
         cheeseToEdit.setName(editedCheese.getName());
         cheeseToEdit.setDescription(editedCheese.getDescription());
-        cheeseToEdit.setCategory(editedCheese.getCategory());
+        cheeseToEdit.setCategory(categoryDao.findOne(category));
 //        cheeseToEdit.setCheeseRating(editedCheese.getCheeseRating());
         cheeseDao.save(cheeseToEdit);
         return "redirect: ";

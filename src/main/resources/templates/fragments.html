@@ -10,10 +10,15 @@
 </head>
 <body>
 
-<nav th:fragment="navigation">
-    <a href="/cheese">Home</a> |
-    <a href="/category">Categories</a> |
-    <a href="/menu">Menus</a>
+<nav th:fragment="navigation" class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li><a href="/cheese">Home</a></li>
+            <li><a href="/category">Categories</a></li>
+            <li><a href="/menu">Menus</a></li>
+        </ul>
+    </div>
+
 </nav>
 
 </body>

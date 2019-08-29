@@ -8,15 +8,13 @@
 
         <nav th:replace="fragments :: navigation"></nav>
 
-        <div>
-            <ul>
-                <li th:each="menu : ${menus}">
-                    <a th:href="'/menu/view/' + ${menu.id}" th:text="${menu.name}"></a>
-                </li>
-            </ul>
-        </div>
+        <table class="table table-striped">
+            <tr th:each="menu : ${menus}">
+                <td><a th:href="'/menu/view/' + ${menu.id}" th:text="${menu.name}"></a></td>
+            </tr>
+        </table>
 
-        <a href="/menu/add">Add New Menu</a>
+        <a href="/menu/add" class="btn btn-primary btn-md" role="button">Add New Menu</a>
 
     </body>
 </html>
