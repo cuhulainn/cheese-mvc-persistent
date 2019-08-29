@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -76,6 +73,31 @@ public class CheeseController {
         }
 
         return "redirect:";
+    }
+
+    @RequestMapping(value="edit/{cheeseId}", method = RequestMethod.GET)
+    public String displayEditForm(Model model, @PathVariable int cheeseId) {
+        model.addAttribute("cheese", cheeseDao.findOne(cheeseId));
+        model.addAttribute("categories", categoryDao.findAll());
+        return "cheese/edit";
+    }
+
+    @RequestMapping(value="edit", method = RequestMethod.POST)
+    public String processEditForm(@ModelAttribute @Valid Cheese editedCheese, Errors errors, Model model) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("cheese", cheeseDao.findOne(editedCheese.getId()));
+            model.addAttribute("categories", categoryDao.findAll() );
+            return "cheese/edit";
+        }
+
+        Cheese cheeseToEdit = cheeseDao.findOne(editedCheese.getId());
+        cheeseToEdit.setName(editedCheese.getName());
+        cheeseToEdit.setDescription(editedCheese.getDescription());
+        cheeseToEdit.setCategory(editedCheese.getCategory());
+//        cheeseToEdit.setCheeseRating(editedCheese.getCheeseRating());
+        cheeseDao.save(cheeseToEdit);
+        return "redirect: ";
     }
 
 }

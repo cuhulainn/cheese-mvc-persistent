@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<h2 th:text="'Edit Cheese: ' + ${cheese.name} + ' (id=' + ${cheese.id} + ')'"></h2>
+
+<form method="post" action="/cheese/edit" style="max-width:600px;" th:object="${cheese}">
+
+    <div class="form-group">
+        <label th:for="name">Name of Cheese:</label>
+        <input class="form-control" th:field="*{name}" th:value="name" />
+        <span th:errors="*{name}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="description">Description of Cheese:</label>
+        <input class="form-control" th:field="*{description}" th:value="description"/>
+        <span th:errors="*{description}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="category">Type</label>
+        <select th:field="*{category}">
+            <option th:each="category : ${categories}"
+                    th:text="${category.name}"
+                    th:value="${category.id}"></option>
+        </select>
+    </div>
+    <!--<div class="form-group">
+        <label th:for="cheeseRating">Rating (1-5)</label>
+        <input class="form-control" th:field="*{cheeseRating}" />
+        <span th:errors="*{cheeseRating}" class="error"></span>
+    </div>-->
+    <input type="hidden" th:value="*{id}" th:field="*{id}" />
+    <input type="submit" value="Edit Cheese" />
+</form>
+
+</body>
+</html>
