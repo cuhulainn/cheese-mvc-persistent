@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 /**
  * Created by LaunchCode
@@ -49,6 +50,7 @@ public class CheeseController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Cheese");
+            model.addAttribute("categories", categoryDao.findAll());
             return "cheese/add";
         }
 
@@ -89,7 +91,7 @@ public class CheeseController {
         if (errors.hasErrors()) {
             model.addAttribute("cheese", cheeseDao.findOne(id));
             model.addAttribute("categories", categoryDao.findAll() );
-            return "cheese/edit";
+            return "redirect: /cheese/edit/" + id;
         }
 
         Cheese cheeseToEdit = cheeseDao.findOne(id);
@@ -101,4 +103,19 @@ public class CheeseController {
         return "redirect: ";
     }
 
+    @RequestMapping(value="category/{categoryId}", method = RequestMethod.GET)
+    public String category(@PathVariable int categoryId, Model model) {
+
+        Category cat = categoryDao.findOne(categoryId);
+        ArrayList<Cheese> cheesesInCat = new ArrayList<>();
+
+        for (Cheese cheese : cheeseDao.findAll()) {
+            if (cheese.getCategory() == cat) {
+                cheesesInCat.add(cheese);
+            }
+        }
+        model.addAttribute("title", "Cheeses in the '" + cat.getName() + "' Category");
+        model.addAttribute("cheeses", cheesesInCat);
+        return "cheese/index";
+    }
 }

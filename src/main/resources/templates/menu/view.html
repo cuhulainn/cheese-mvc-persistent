@@ -4,18 +4,17 @@
 
     <body class="container">
 
-        <h1 th:text="${menu.name}">Default Title</h1>
+        <h1 th:text="${menu.name} + ' Menu'">Default Title</h1>
 
         <nav th:replace="fragments :: navigation"></nav>
 
-        <div>
-            <ul>
-                <li th:each="cheese : ${menu.cheeses}" th:text="${cheese.name}">
-                </li>
-            </ul>
-        </div>
+        <table class="table table-striped">
+            <tr th:each="cheese : ${menu.cheeses}">
+                <td th:text="${cheese.name}"></td>
+            </tr>
+        </table>
 
-        <p><a th:href="'/menu/add-item/' + ${menu.id}">Add Cheese</a></p>
+        <p><a th:href="'/menu/add-item/' + ${menu.id}" class="btn btn-primary btn-md" role="button">Add Cheese</a></p>
 
     </body>
 </html>
